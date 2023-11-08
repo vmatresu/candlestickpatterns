@@ -1,0 +1,45 @@
+//@version=5
+indicator("Unified Candlestick Patterns Detector", shorttitle="UCPD", overlay=true)
+
+// User-configurable variables
+var int sma_length = input(4, "SMA Length for Trend Determination")
+var float doji_threshold = input(0.1, "Doji Threshold as a Percentage of High-Low Range")
+var float shadow_body_ratio = input(0.3, "Shadow to Body Ratio for Hammer and Shooting Star")
+var float shadow_body_factor = input(2.0, "Shadow to Body Factor for Hammer and Shooting Star")
+var string style_doji = input("xcross", "Style for Doji", options=["cross", "circle", "diamond", "square", "triangleup", "triangledown", "flag", "arrowup", "arrowdown", "xcross"])
+var string style_hammer = input("arrowup", "Style for Hammer", options=["cross", "circle", "diamond", "square", "triangleup", "triangledown", "flag", "arrowup", "arrowdown", "xcross"])
+var string style_inverted_hammer = input("arrowdown", "Style for Inverted Hammer", options=["cross", "circle", "diamond", "square", "triangleup", "triangledown", "flag", "arrowup", "arrowdown", "xcross"])
+var string style_shooting_star = input("arrowdown", "Style for Shooting Star", options=["cross", "circle", "diamond", "square", "triangleup", "triangledown", "flag", "arrowup", "arrowdown", "xcross"])
+var string style_hanging_man = input("arrowdown", "Style for Hanging Man", options=["cross", "circle", "diamond", "square", "triangleup", "triangledown", "flag", "arrowup", "arrowdown", "xcross"])
+var string style_bullish_engulfing = input("labelup", "Style for Bullish Engulfing", options=["cross", "circle", "diamond", "square", "triangleup", "triangledown", "flag", "arrowup", "arrowdown", "xcross"])
+var string style_bearish_engulfing = input("labeldown", "Style for Bearish Engulfing", options=["cross", "circle", "diamond", "square", "triangleup", "triangledown", "flag", "arrowup", "arrowdown", "xcross"])
+var string style_morning_star = input("triangleup", "Style for Morning Star", options=["cross", "circle", "diamond", "square", "triangleup", "triangledown", "flag", "arrowup", "arrowdown", "xcross"])
+var string style_evening_star = input("triangledown", "Style for Evening Star", options=["cross", "circle", "diamond", "square", "triangleup", "triangledown", "flag", "arrowup", "arrowdown", "xcross"])
+// Add other styles as needed...
+
+// Function to determine if it's an uptrend
+isUptrend() => close > ta.sma(close, sma_length)
+
+// Function to determine if it's a downtrend
+isDowntrend() => close < ta.sma(close, sma_length)
+
+// Define a function for Doji
+isDoji() => math.abs(close - open) <= ((high - low) * doji_threshold)
+
+// Define functions for other patterns
+// ... (add your pattern detection functions here)
+
+// Main logic for determining signals based on patterns
+// ... (add your trading logic here)
+
+// Plot patterns on the chart using symbols
+plotshape(series=isDoji(), title="Doji", location=location.belowbar, color=color.blue, style=style_doji, size=size.small)
+plotshape(series=isHammer(), title="Hammer", location=location.belowbar, color=color.green, style=style_hammer, size=size.small)
+plotshape(series=isInvertedHammer(), title="Inverted Hammer", location=location.abovebar, color=color.purple, style=style_inverted_hammer, size=size.small)
+plotshape(series=isShootingStar(), title="Shooting Star", location=location.abovebar, color=color.red, style=style_shooting_star, size=size.small)
+plotshape(series=isHangingMan(), title="Hanging Man", location=location.belowbar, color=color.red, style=style_hanging_man, size=size.small)
+plotshape(series=isBullishEngulfing(), title="Bullish Engulfing", location=location.belowbar, color=color.green, style=style_bullish_engulfing, size=size.small)
+plotshape(series=isBearishEngulfing(), title="Bearish Engulfing", location=location.abovebar, color=color.red, style=style_bearish_engulfing, size=size.small)
+plotshape(series=isMorningStar(), title="Morning Star", location=location.belowbar, color=color.green, style=style_morning_star, size=size.small)
+plotshape(series=isEveningStar(), title="Evening Star", location=location.abovebar, color=color.red, style=style_evening_star, size=size.small)
+// Add other plotting instructions as needed...
