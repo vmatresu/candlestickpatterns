@@ -1,0 +1,40 @@
+//@version=5
+indicator("Candlestick Patterns Detector", shorttitle="CPD", overlay=true)
+
+// Function to determine if it's an uptrend
+isUptrend() => close > ta.sma(close, 4)
+
+// Function to determine if it's a downtrend
+isDowntrend() => close < ta.sma(close, 4)
+
+// Define a function for Doji
+isDoji() => math.abs(close - open) <= ((high - low) * 0.1)
+
+// Define functions for other patterns
+isHammer() => isDowntrend() and low == math.min(low, close) and (high - math.max(open, close)) < (math.abs(open - close) * 0.3) and (close - low) > 2 * math.abs(open - close)
+isInvertedHammer() => isDowntrend() and high == math.max(high, close) and (math.min(open, close) - low) < (math.abs(close - open) * 0.3) and (high - close) > 2 * math.abs(close - open)
+isShootingStar() => isUptrend() and high == math.max(high, close) and (math.min(open, close) - low) < (math.abs(close - open) * 0.3) and (high - close) > 2 * math.abs(close - open)
+isHangingMan() => isUptrend() and low == math.min(low, close) and (high - math.max(open, close)) < (math.abs(open - close) * 0.3) and (close - low) > 2 * math.abs(open - close)
+
+// Two-day patterns
+isBullishEngulfing() => isDowntrend() and close > open and close[1] < open[1] and close > open[1] and open < close[1]
+isBearishEngulfing() => isUptrend() and open > close and open[1] < close[1] and open > close[1] and close < open[1]
+
+// Three-day patterns
+isMorningStar() => isDowntrend() and open[2] > close[2] and close[1] < open[2] and close[1] < close[2] and open < close and open > close[1]
+isEveningStar() => isUptrend() and open[2] < close[2] and close[1] > close[2] and close[1] > open[2] and open > close and open < close[1]
+
+// Define more functions for additional patterns here...
+
+// Detect patterns on the chart using symbols
+plotshape(series=isDoji(), title="Doji", location=location.belowbar, color=color.blue, style=shape.xcross, size=size.small)
+plotshape(series=isHammer(), title="Hammer", location=location.belowbar, color=color.green, style=shape.arrowup, size=size.small)
+plotshape(series=isInvertedHammer(), title="Inverted Hammer", location=location.abovebar, color=color.purple, style=shape.arrowdown, size=size.small)
+plotshape(series=isShootingStar(), title="Shooting Star", location=location.abovebar, color=color.red, style=shape.arrowdown, size=size.small)
+plotshape(series=isHangingMan(), title="Hanging Man", location=location.belowbar, color=color.red, style=shape.arrowdown, size=size.small)
+plotshape(series=isBullishEngulfing(), title="Bullish Engulfing", location=location.belowbar, color=color.green, style=shape.labelup, size=size.small)
+plotshape(series=isBearishEngulfing(), title="Bearish Engulfing", location=location.abovebar, color=color.red, style=shape.labeldown, size=size.small)
+plotshape(series=isMorningStar(), title="Morning Star", location=location.belowbar, color=color.green, style=shape.triangleup, size=size.small)
+plotshape(series=isEveningStar(), title="Evening Star", location=location.abovebar, color=color.red, style=shape.triangledown, size=size.small)
+
+// Add more functions for other patterns and plot them similarly using symbols
